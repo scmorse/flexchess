@@ -12,6 +12,7 @@
     "Mongo": false,
     "_global": true,
     "Piece": true,
-    "ReactiveVar": false
+    "ReactiveVar": false,
+    "Router": false
   }
 }

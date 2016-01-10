@@ -9,8 +9,13 @@ Router.map(function(){
     Router.go('choose_board_size');
   });
 
-  this.route('/setup', {
+  this.route('/setup-board', {
     name: 'choose_board_size',
     template: 'choose_board_size'
+  });
+
+  this.route('/setup-pieces', {
+    name: 'arrange_pieces',
+    template: 'arrange_pieces'
   });
 });

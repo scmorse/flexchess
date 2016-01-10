@@ -21,9 +21,13 @@ function adjustHoverSelectedVars(event, template) {
 
 Template.choose_board_size.events({
   "mouseenter table.choose-board-size td": adjustHoverSelectedVars,
-  "click table.choose-board-size td": function(event) {
-    adjustHoverSelectedVars(event);
-    // Router.go('');
+  "click table.choose-board-size td": function(event, template) {
+    adjustHoverSelectedVars(event, template);
+    Router.go('arrange_pieces', {}, { query:
+      { width: template.hoverSelectedWidth.get(),
+        height: template.hoverSelectedHeight.get()
+      }
+    });
   }
 });
 
