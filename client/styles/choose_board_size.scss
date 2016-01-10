@@ -1,0 +1,33 @@
+$squareSize: 30px;
+$squareMargin: 5px;
+$selected: black;
+$unselected: transparent;
+
+.choose_board_size {
+  .show-dimensions {
+    display: inline-block;
+  }
+
+  table.choose-board-size {
+    display: inline-block;
+    table-layout: fixed;
+    white-space: nowrap;
+
+    tr {
+      td {
+        overflow: hidden;
+        white-space: nowrap;
+        height: $squareSize;
+        width: $squareSize;
+        margin: $squareMargin;
+        border-radius: 1px;
+        border: 1px solid black;
+
+        background: $unselected;
+        &.selected {
+          background: $selected;
+        }
+      }
+    }
+  }
+}

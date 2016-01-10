@@ -1,0 +1,17 @@
+@import "mixins/_all";
+@import "lib/media";
+
+@media #{$notphone} {
+  nav .navigation .nav-item {
+    width: 100px;
+    list-style: none;
+    display: inline-block;
+    background-color: #b2dff1;
+    padding: 5px;
+    text-align: center;
+
+    a {
+      text-decoration: none;
+    }
+  }
+}

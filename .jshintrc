@@ -1,0 +1,17 @@
+{
+  "node": true,
+  "globals": {
+    "$": false,
+    "Template": false,
+    "Meteor": false,
+    "Piece": false,
+    "_": true,
+    "lodash": false,
+    "window": false,
+    "global": false,
+    "Mongo": false,
+    "_global": true,
+    "Piece": true,
+    "ReactiveVar": false
+  }
+}

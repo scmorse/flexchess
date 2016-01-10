@@ -1,0 +1,15 @@
+<template name="choose_board_size">
+  <div class="choose_board_size">
+    <h1>Choose board size</h1>
+    <table class="choose-board-size">
+      {{ #each loopCount maxRows }}
+        <tr>
+        {{ #each loopCount maxCols }}
+          <td></td>
+        {{ /each }}
+        </tr>
+      {{ /each }}
+    </table>
+    <h2 class="show-dimensions">{{ hoverSelectedWidth }} x {{ hoverSelectedHeight }}</h2>
+  </div>
+</template>
