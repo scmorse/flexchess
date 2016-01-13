@@ -4,52 +4,48 @@ var margin = (boardSquareDimen - pieceDimen) / 2;
 var darkSquareColor = "green";
 var lightSquareColor = "white";
 
-_global.tmp = new ReactiveVar();
-
 Template.board.onRendered(function() {
-  this.autorun(function() {
-    var template = Template.instance();
-    var boardState = FlexChessGame.findOne(template.data.gameId).initialBoard;
-    var emitter = template.data.emitter || new EventEmitter();
-    if (boardState.length !== 7) {
-      tmp.get();
-    }
-    if (!boardState || !boardState.length) {
-      return;
-    }
+  var template = Template.instance();
 
-    function boardNumCols() {
-      return boardState[0].length;
-    }
+  var game = FlexChessGame.findOne(template.data.gameId);
+  var boardNumRows = game.numRows();
+  var boardNumCols = game.numCols();
 
-    function boardNumRows() {
-      return boardState.length;
-    }
+  var emitter = template.data.emitter || new EventEmitter();
 
+  if (!boardNumRows || !boardNumCols) {
+    return;
+  }
 
-    var s = Snap(template.find("svg.board"))
-    .attr({
-      width: boardNumCols() * boardSquareDimen,
-      height: boardNumRows() * boardSquareDimen,
+  var s = Snap(template.find("svg.board"))
+  .attr({
+    width: boardNumCols * boardSquareDimen,
+    height: boardNumRows * boardSquareDimen,
+  });
+  s.clear();
+
+  var boardRects = _.range(boardNumRows).map(function(rowIndex){
+    return _.range(boardNumCols).map(function(colIndex) {
+      return s.rect(colIndex*boardSquareDimen, rowIndex*boardSquareDimen, boardSquareDimen, boardSquareDimen)
+      .attr({
+        fill: (rowIndex + colIndex) % 2 === 0 ? lightSquareColor : darkSquareColor
+      });
     });
-    s.clear();
+  });
 
-    // Draw board squares
-    _.each(boardState, function(row, rowIndex) {
-      _.each(row, function(cell, colIndex) {
-        var emit = function() {
-          emitter.emit('click_cell', cell, rowIndex, colIndex);
+  _.times(boardNumRows, function(rowIndex) {
+    _.times(boardNumCols, function(colIndex) {
+      template.autorun(function() {
+        var cellAtRowCol = FlexChessGame.findCellAt(game._id, rowIndex, colIndex);
+
+        var emitClickCell = function() {
+          emitter.emit('click_cell', cellAtRowCol, rowIndex, colIndex);
         };
 
-        var rect = s.rect(colIndex*boardSquareDimen, rowIndex*boardSquareDimen, boardSquareDimen, boardSquareDimen)
-        .attr({
-          fill: (rowIndex + colIndex) % 2 === 0 ? lightSquareColor : darkSquareColor
-        })
-        .click(emit);
-
-        if (cell.piece) {
-          var pieceColor = cell.playerIndex === 0 ? 'w' : 'b';
-          var pieceCharId = cell.piece.toLowerCase();
+        // Draw board squares
+        if (cellAtRowCol.piece) {
+          var pieceColor = cellAtRowCol.playerIndex === 0 ? 'w' : 'b';
+          var pieceCharId = cellAtRowCol.piece.toLowerCase();
           Snap.load('/pieces/regular/' + pieceColor + pieceCharId + '.svg', function(res) {
             var svg = res.select('svg');
             svg.attr({
@@ -58,20 +54,23 @@ Template.board.onRendered(function() {
               width: pieceDimen,
               height: pieceDimen
             });
-            svg.click(emit);
+            svg.click(emitClickCell);
             s.append(svg);
           });
         }
+
+        boardRects[rowIndex][colIndex]
+        .unclick() // Remove the old handler
+        .click(emitClickCell);
       });
     });
+  });
 
-    // Draw the border around the board
-    s.rect(0, 0, boardNumCols() * boardSquareDimen, boardNumRows() * boardSquareDimen).attr({
-      fill: "none",
-      stroke: "#000000",
-      strokeWidth: 2
-    });
-
+  // Draw the border around the board
+  s.rect(0, 0, boardNumCols * boardSquareDimen, boardNumRows * boardSquareDimen).attr({
+    fill: "none",
+    stroke: "#000000",
+    strokeWidth: 2
   });
 
 });

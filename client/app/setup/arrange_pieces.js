@@ -10,7 +10,7 @@ Template.arrange_pieces.helpers({
   selectPieceTemplate: function() {
     var template = Template.instance();
     return {
-      gameId: "BivYwGuKDbo5azMwa",
+      gameId: "C8dorqfcz4kNyYtg4",
       emitter: template.pieceSelectionEmitter
     };
   }
@@ -43,8 +43,7 @@ Template.arrange_pieces.onCreated(function() {
     var insertPiece = template.selectedPiece;
     if (insertPiece) {
       var set = { $set: {} };
-      set.$set['initialBoard.' + rowIndex + '.' + colIndex] = insertPiece;
-      // set.$set.initialBoard = [[{}, {}, {}], [{}, {}], [{}]];
+      set.$set['initialBoard.' + rowIndex + '_' + colIndex] = insertPiece;
       FlexChessGame.update({ _id: template.gameId }, set);
     }
   });
@@ -54,11 +53,11 @@ Template.arrange_pieces.onCreated(function() {
   template.pieceSelectionEmitter.on('click_cell', function(piece, rowIndex, colIndex) {
     // set selected piece
     template.selectedPiece = piece;
+    template.pieceSelectionEmitter.emit('deselect_all');
+    template.pieceSelectionEmitter.emit('select', rowIndex, colIndex);
   });
 });
 
 Template.arrange_pieces.onDestroyed(function() {
-  console.log('removed');
   FlexChessGame.remove(this.gameId);
-  console.log('removed');
 });
