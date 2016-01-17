@@ -42,9 +42,7 @@ Template.arrange_pieces.onCreated(function() {
     // put selected piece into board
     var insertPiece = template.selectedPiece;
     if (insertPiece) {
-      var set = { $set: {} };
-      set.$set['initialBoard.' + rowIndex + '_' + colIndex] = insertPiece;
-      FlexChessGame.update({ _id: template.gameId }, set);
+      FlexChessGame.updateInitialBoardCellAt(template.gameId, rowIndex, colIndex, insertPiece);
     }
   });
 
