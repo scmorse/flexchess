@@ -5,6 +5,7 @@ Router.configure({
 });
 
 Router.map(function(){
+
   this.route('/', function(){
     Router.go('choose_board_size');
   });
@@ -18,4 +19,10 @@ Router.map(function(){
     name: 'arrange_pieces',
     template: 'arrange_pieces'
   });
+
+  this.route('/game/:gameId', {
+    name: 'flexgame',
+    template: 'flexgame'
+  });
+
 });

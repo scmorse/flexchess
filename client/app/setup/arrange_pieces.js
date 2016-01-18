@@ -1,4 +1,13 @@
 
+Template.arrange_pieces.events({
+
+  'click [data-action="continue"]': function(event, template) {
+    // TODO assess that board is valid
+    Router.go('flexgame', { gameId: template.gameId });
+  }
+
+});
+
 Template.arrange_pieces.helpers({
   gameBoard: function() {
     var template = Template.instance();
@@ -33,9 +42,9 @@ Template.arrange_pieces.onCreated(function() {
   var template = this;
 
   template.subscribe('games');
-  template.subscribe('game_templates');
 
   template.gameId = FlexChessGame.newGame(boardNumCols(), boardNumRows());
+  console.log(template.gameId);
 
   template.gameEmitter = new EventEmitter();
   template.gameEmitter.on('click_cell', function(piece, rowIndex, colIndex) {
@@ -57,5 +66,6 @@ Template.arrange_pieces.onCreated(function() {
 });
 
 Template.arrange_pieces.onDestroyed(function() {
-  FlexChessGame.remove(this.gameId);
+  // console.log('calling remove');
+  // FlexChessGame.remove(this.gameId);
 });

@@ -3,6 +3,8 @@ var pieceDimen = 56;
 var margin = (boardSquareDimen - pieceDimen) / 2;
 var darkSquareColor = "green";
 var lightSquareColor = "white";
+var outlineBorderThickness = 3;
+var outlineBorderColor = 'blue';
 
 var defaultCellColor = function(rowIndex, colIndex) {
   return (rowIndex + colIndex) % 2 === 0 ? lightSquareColor : darkSquareColor;
@@ -10,6 +12,8 @@ var defaultCellColor = function(rowIndex, colIndex) {
 
 Template.board.onRendered(function() {
   var template = Template.instance();
+
+  console.log(template.data.gameId);
 
   var game = FlexChessGame.findOne(template.data.gameId);
   var boardNumRows = game.numRows();
@@ -28,20 +32,55 @@ Template.board.onRendered(function() {
   });
   s.clear();
 
+  var makeDefaultRectCell = function(rowIndex, colIndex) {
+    return s.rect(colIndex*boardSquareDimen, rowIndex*boardSquareDimen, boardSquareDimen, boardSquareDimen)
+    .attr({
+      fill: defaultCellColor(rowIndex, colIndex)
+    });
+  };
+
   var boardSvgElements = _.range(boardNumRows).map(function(rowIndex){
     return _.range(boardNumCols).map(function(colIndex) {
       return {
-        rect: s.rect(colIndex*boardSquareDimen, rowIndex*boardSquareDimen, boardSquareDimen, boardSquareDimen)
-        .attr({
-          fill: defaultCellColor(rowIndex, colIndex)
-        })
+        rect: makeDefaultRectCell(rowIndex, colIndex)
       };
+    });
+  });
+
+  emitter.on('reset_cell', function(rowIndex, colIndex) {
+    var rect = boardSvgElements[rowIndex][colIndex].rect;
+    rect.attr({
+      x: colIndex*boardSquareDimen,
+      y: rowIndex*boardSquareDimen,
+      width: boardSquareDimen,
+      height: boardSquareDimen,
+      fill: defaultCellColor(rowIndex, colIndex),
+      strokeWidth: 0
+    });
+  });
+
+  emitter.on('reset_all_cells', function() {
+    _.times(boardNumRows, function(rowIndex) {
+      _.times(boardNumCols, function(colIndex) {
+        emitter.emit('reset_cell', rowIndex, colIndex);
+      });
     });
   });
 
   emitter.on('select', function(rowIndex, colIndex) {
     boardSvgElements[rowIndex][colIndex].rect.attr({
       fill: "yellow"
+    });
+  });
+
+  emitter.on('outline', function(rowIndex, colIndex) {
+    boardSvgElements[rowIndex][colIndex].rect.attr({
+      x: colIndex * boardSquareDimen + outlineBorderThickness,
+      y: rowIndex * boardSquareDimen + outlineBorderThickness,
+      width: boardSquareDimen - 2 * outlineBorderThickness,
+      height: boardSquareDimen - 2 * outlineBorderThickness,
+      stroke: outlineBorderColor,
+      strokeWidth: 2*outlineBorderThickness
     });
   });
 

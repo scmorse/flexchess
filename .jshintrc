@@ -4,16 +4,24 @@
     "$": false,
     "Template": false,
     "Meteor": false,
-    "Piece": false,
     "_": true,
     "lodash": false,
     "window": false,
     "global": false,
     "Mongo": false,
     "_global": true,
-    "Piece": true,
     "ReactiveVar": false,
     "Router": false,
-    "Mediator": true
+
+    "Move": true,
+    "Board": true,
+
+    "Piece": true,
+    "King": true,
+    "Queen": true,
+    "Rook": true,
+    "Bishop": true,
+    "Knight": true,
+    "Pawn": true
   }
 }

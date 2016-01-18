@@ -1,8 +1,14 @@
 
 
 .arrange_pieces {
+  display: inline-block;
+
   .board {
     margin-top: 10px;
     display: inline-block;
+  }
+
+  button#continue {
+    float: right;
   }
 }

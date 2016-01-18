@@ -21,7 +21,17 @@ Package.onUse(function(api) {
   api.use('stevezhu:lodash');
 
   api.addFiles('flexchess-model.js', ['client', 'server']);
+
+
   api.export('Board', ['client', 'server']);
+  api.export('Move', ['client', 'server']);
+  api.export('Piece', ['client', 'server']);
+  api.export('King', ['client', 'server']);
+  api.export('Queen', ['client', 'server']);
+  api.export('Rook', ['client', 'server']);
+  api.export('Bishop', ['client', 'server']);
+  api.export('Knight', ['client', 'server']);
+  api.export('Pawn', ['client', 'server']);
 });
 
 Package.onTest(function(api) {

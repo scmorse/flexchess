@@ -1,8 +1,13 @@
 <template name="arrange_pieces">
   <div class="arrange_pieces">
     {{ #if Template.subscriptionsReady }}
-      {{ > board gameBoard }}
-      {{ > board selectPieceTemplate }}
+      <div>
+        {{ > board gameBoard }}
+        {{ > board selectPieceTemplate }}
+      </div>
+      <div>
+        <button id="continue" class="default-button" data-action="continue" >Continue</button>
+      </div>
     {{ /if }}
   </div>
 </template>
